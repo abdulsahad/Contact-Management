@@ -57,6 +57,24 @@ def search_contact(contacts):
 
 
 
+def delete_contact(contacts):
+    print("\n---// Delete Contact //---")
+    name = input("Enter name to delete: ").strip()
+    if not name:
+        print("Please enter a name.")
+        return
+
+    # search for the contact (first match)
+    for contact in contacts:
+        if contact.get("name", "").strip().lower() == name.lower():
+            contacts.remove(contact)
+            print(f"Contact '{contact.get('name')}' deleted successfully.")
+            return
+
+    print("Contact not found.")
+
+
+
 
 def main():
     contacts = []  # This is a list to store contacts
@@ -71,6 +89,8 @@ def main():
             view_contacts(contacts)
         elif choice == "3":
             search_contact(contacts)
+        elif choice == "4":
+            delete_contact(contacts)
         elif choice == "5":
             print("Goodbye!")
             break
