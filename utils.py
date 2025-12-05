@@ -13,5 +13,5 @@ def valid_phone(phone: str) -> bool:
 def valid_email(email: str) -> bool:
     if not email:
         return True  # optional field accepted as empty
-    # very simple email check
+    # email check
     return bool(re.match(r"[^@]+@[^@]+\.[^@]+", email))
