@@ -1,5 +1,6 @@
 from contacts_manager import ContactsManager
 from storage import load_contacts, save_contacts
+from utils import valid_name, valid_phone, valid_email
 
 
 def show_menu():
@@ -64,19 +65,24 @@ def search_contact(contacts):
 
 def delete_contact(contacts):
     print("\n---// Delete Contact //---")
-    name = input("Enter name to delete: ").strip()
+    name = input("Name to delete: ").strip()
     if not name:
         print("Please enter a name.")
         return
 
-    # search for the contact to delete
+    # linear search through the list to find and remove
     for contact in contacts:
         if contact.get("name", "").strip().lower() == name.lower():
-            contacts.remove(contact)
-            print(f"Contact '{contact.get('name')}' deleted successfully.")
+            confirm = input(f"Delete '{contact.get('name')}'? (y/n): ").strip().lower()
+            if confirm == 'y':
+                contacts.remove(contact)
+                print("Deleted.")
+            else:
+                print("Delete cancelled.")
             return
 
     print("Contact not found.")
+
 
 
 
@@ -96,12 +102,21 @@ def main():
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
-            print("\n--- Add Contact ---")
-            name = input("Name: ")
-            phone = input("Phone: ")
-            email = input("Email: ")
-            mgr.add_contact(name, phone, email)
-            print("Contact added.")
+           print("\n--- Add Contact ---")
+           name = input("Name: ").strip()
+           if not valid_name(name):
+               print("Name cannot be empty.")
+               continue
+           phone = input("Phone: ").strip()
+           if not valid_phone(phone):
+                print("Phone looks invalid. Save cancelled.")
+                continue
+           email = input("Email (optional): ").strip()
+           if not valid_email(email):
+                print("Email looks invalid. Save cancelled.")
+                continue
+           mgr.add_contact(name, phone, email)
+           print("Contact added.")
         elif choice == "2":
             contacts = mgr.list_contacts()
             if not contacts:
