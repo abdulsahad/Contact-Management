@@ -6,29 +6,6 @@ def show_menu():
     print("4. Delete Contact")
     print("5. Exit")
 
-def main():
-    contacts = []  # list to store contacts
-
-    while True:
-        show_menu()
-        choice = input("Enter your choice: ")
-
-        if choice == "1":
-            add_contact(contacts)
-        elif choice == "2":
-            view_contacts(contacts)
-        elif choice == "5":
-            print("Goodbye!")
-            break
-        else:
-            print("This option will be added soon.")
-
-
-
-if __name__ == "__main__":
-    main()
-
-
 def add_contact(contacts):
     print("\n---// Adding a New Contact ---")
     name = input("Enter contact name: ")
@@ -57,3 +34,33 @@ def view_contacts(contacts):
         phone = contact.get("phone", "")
         email = contact.get("email", "")
         print(f"{idx}. {name} - {phone} - {email}")
+
+        
+
+def main():
+    contacts = []  # list to store contacts
+
+    while True:
+        show_menu()
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            add_contact(contacts)
+        elif choice == "2":
+            view_contacts(contacts)
+        elif choice == "5":
+            print("Goodbye!")
+            break
+        else:
+            print("This option will be added soon.")
+
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
