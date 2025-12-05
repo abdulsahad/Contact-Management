@@ -35,10 +35,31 @@ def view_contacts(contacts):
         email = contact.get("email", "")
         print(f"{idx}. {name} - {phone} - {email}")
 
-        
+
+
+def search_contact(contacts):
+    print("\n---// Search Contact //---")
+    name = input("Enter name to search: ").strip()
+    if not name:
+        print("Please enter a name.")
+        return
+
+    # Here is a linear search through contacts (O(n))
+    for contact in contacts:
+        if contact.get("name", "").strip().lower() == name.lower():
+            print("Contact found:")
+            print(f"Name: {contact.get('name')}")
+            print(f"Phone: {contact.get('phone')}")
+            print(f"Email: {contact.get('email')}")
+            return
+
+    print("Contact not found.")
+
+
+
 
 def main():
-    contacts = []  # list to store contacts
+    contacts = []  # This is a list to store contacts
 
     while True:
         show_menu()
@@ -48,6 +69,8 @@ def main():
             add_contact(contacts)
         elif choice == "2":
             view_contacts(contacts)
+        elif choice == "3":
+            search_contact(contacts)
         elif choice == "5":
             print("Goodbye!")
             break
