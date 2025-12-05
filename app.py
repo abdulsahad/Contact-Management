@@ -1,3 +1,6 @@
+from contacts_manager import ContactsManager
+
+
 def show_menu():
     print("\n=====// Contact Management App //=====")
     print("1. Add Contact")
@@ -77,33 +80,53 @@ def delete_contact(contacts):
 
 
 def main():
-    contacts = []  # This is a list to store contacts
+    mgr = ContactsManager()
 
     while True:
         show_menu()
-        choice = input("Enter your choice: ")
+        choice = input("Enter your choice: ").strip()
 
         if choice == "1":
-            add_contact(contacts)
+            print("\n--- Add Contact ---")
+            name = input("Name: ")
+            phone = input("Phone: ")
+            email = input("Email: ")
+            mgr.add_contact(name, phone, email)
+            print("Contact added.")
         elif choice == "2":
-            view_contacts(contacts)
+            contacts = mgr.list_contacts()
+            if not contacts:
+                print("No contacts found.")
+            else:
+                print("\n--- All Contacts ---")
+                for i, c in enumerate(contacts, start=1):
+                    print(f"{i}. {c.get('name')} - {c.get('phone')} - {c.get('email')}")
         elif choice == "3":
-            search_contact(contacts)
+            name = input("Name to search: ")
+            found = mgr.find_by_name(name)
+            if found:
+                print("Found:", found)
+            else:
+                print("Contact not found.")
         elif choice == "4":
-            delete_contact(contacts)
+            name = input("Name to delete: ")
+            ok = mgr.delete_contact(name)
+            print("Deleted." if ok else "Contact not found.")
         elif choice == "5":
-            print("Goodbye!")
+            name = input("Name to update: ")
+            phone = input("New phone (leave blank to keep): ")
+            email = input("New email (leave blank to keep): ")
+            # If user leaves blank, pass None for that field to keep original
+            phone_arg = phone if phone.strip() != "" else None
+            email_arg = email if email.strip() != "" else None
+            updated = mgr.update_contact(name, phone=phone_arg, email=email_arg)
+            print("Updated." if updated else "Contact not found.")
+        elif choice == "6":
+            print("Goodbye.")
             break
         else:
-            print("This option will be added soon.")
-
+            print("Invalid option. Try again.")
 
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
