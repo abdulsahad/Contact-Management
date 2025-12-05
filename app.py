@@ -64,7 +64,7 @@ def delete_contact(contacts):
         print("Please enter a name.")
         return
 
-    # search for the contact (first match)
+    # search for the contact to delete
     for contact in contacts:
         if contact.get("name", "").strip().lower() == name.lower():
             contacts.remove(contact)
