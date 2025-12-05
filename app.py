@@ -1,4 +1,5 @@
 from contacts_manager import ContactsManager
+from storage import load_contacts, save_contacts
 
 
 def show_menu():
@@ -80,8 +81,15 @@ def delete_contact(contacts):
 
 
 
+DATA_FILE = "contacts.json"
+
 def main():
     mgr = ContactsManager()
+    # load existing contacts
+    initial = load_contacts(DATA_FILE)
+    for d in initial:
+        # expect dict with keys name/phone/email
+        mgr.add_contact(d.get("name", ""), d.get("phone", ""), d.get("email", ""))
 
     while True:
         show_menu()
@@ -117,17 +125,17 @@ def main():
             name = input("Name to update: ")
             phone = input("New phone (leave blank to keep): ")
             email = input("New email (leave blank to keep): ")
-            # If user leaves blank, pass None for that field to keep original
             phone_arg = phone if phone.strip() != "" else None
             email_arg = email if email.strip() != "" else None
             updated = mgr.update_contact(name, phone=phone_arg, email=email_arg)
             print("Updated." if updated else "Contact not found.")
         elif choice == "6":
-            print("Goodbye.")
+            # Save on exit
+            save_contacts(DATA_FILE, mgr.list_contacts())
+            print("Goodbye. Contacts saved.")
             break
         else:
             print("Invalid option. Try again.")
-
 
 if __name__ == "__main__":
     main()
