@@ -11,6 +11,9 @@ def show_menu():
     print("4. Delete Contact")
     print("5. Update Contact")
     print("6. Exit")
+    print("7. Sort contacts & compare algorithms")
+    
+    
 
 def add_contact(contacts):
     print("\n---// Adding a New Contact ---")
@@ -149,6 +152,27 @@ def main():
             save_contacts(DATA_FILE, mgr.list_contacts())
             print("Goodbye. Contacts saved.")
             break
+
+        elif choice == "7":
+            contacts = mgr.list_contacts()
+            if not contacts:
+                print("No contacts to sort.")
+            else:
+                from sorts import bubble_sort, merge_sort, time_sort
+                
+                # show a small sample to avoid huge wait
+                
+                sample = contacts[:]  # or contacts[:100] for big lists
+                t_b = time_sort(bubble_sort, sample)
+                t_m = time_sort(merge_sort, sample)
+                print(f"Bubble sort time: {t_b:.6f}s")
+                print(f"Merge sort time:  {t_m:.6f}s")
+                print("\nFirst 10 contacts sorted by merge_sort:")
+                sorted_sample = merge_sort(sample)[:10]
+                for c in sorted_sample:
+                    print(f"{c.get('name')} - {c.get('phone')}")
+
+        
         else:
             print("Invalid option. Try again.")
 
