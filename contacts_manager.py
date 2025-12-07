@@ -2,35 +2,37 @@ from typing import List, Optional, Dict
 
 class ContactsManager:
     def __init__(self):
-        # primary storage: list of dicts (each dict = contact)
         self.contacts: List[Dict[str, str]] = []
+        # index: maps lower-case name -> contact dict (first occurrence)
+        self.index: Dict[str, Dict[str, str]] = {}
+
+    def _index_name(self, name: str) -> str:
+        return name.strip().lower()
 
     def add_contact(self, name: str, phone: str, email: str = "") -> None:
-        """Add a new contact. (O(1) append)"""
-        contact = {
-            "name": name.strip(),
-            "phone": phone.strip(),
-            "email": email.strip()
-        }
+        contact = {"name": name.strip(), "phone": phone.strip(), "email": email.strip()}
         self.contacts.append(contact)
+        key = self._index_name(contact["name"])
+        # keep first occurrence if duplicate names exist
+        if key not in self.index:
+            self.index[key] = contact
 
     def list_contacts(self) -> List[Dict[str, str]]:
-        """Return a shallow copy of contacts for display (safe)."""
         return list(self.contacts)
 
     def find_by_name(self, name: str) -> Optional[Dict[str, str]]:
-        """Linear search by name (case-insensitive). Returns first match or None. O(n)."""
-        target = name.strip().lower()
+        key = self._index_name(name)
+        # O(1) lookup via index
+        contact = self.index.get(key)
+        if contact:
+            return contact
+        # fallback to linear scan (in case index not present)
         for c in self.contacts:
-            if c.get("name", "").strip().lower() == target:
+            if c.get("name", "").strip().lower() == key:
                 return c
         return None
 
     def update_contact(self, name: str, phone: Optional[str] = None, email: Optional[str] = None) -> bool:
-        """
-        Update first contact matching name.
-        Returns True if updated, False if not found.
-        """
         c = self.find_by_name(name)
         if not c:
             return False
@@ -38,16 +40,29 @@ class ContactsManager:
             c["phone"] = phone.strip()
         if email is not None:
             c["email"] = email.strip()
+        # update index if needed
+        self.index[self._index_name(c["name"])] = c
         return True
 
     def delete_contact(self, name: str) -> bool:
-        """Delete first contact matching name. Returns True if removed."""
         c = self.find_by_name(name)
         if c:
-            self.contacts.remove(c)
+            try:
+                self.contacts.remove(c)
+            except ValueError:
+                pass
+            key = self._index_name(c.get("name", ""))
+            # remove from index; but need to rebuild if duplicates exist
+            if key in self.index and self.index[key] is c:
+                # rebuild index entry for any other contact with same name
+                self.index.pop(key, None)
+                for other in self.contacts:
+                    if other.get("name", "").strip().lower() == key:
+                        self.index[key] = other
+                        break
             return True
         return False
 
     def clear_all(self) -> None:
-        """Remove all contacts."""
         self.contacts.clear()
+        self.index.clear()
