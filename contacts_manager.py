@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict
+from typing import List, Dict, Optional
 
 class ContactsManager:
     def __init__(self):
@@ -36,7 +36,7 @@ class ContactsManager:
         c = self.find_by_name(name)
         if not c:
             return False
-        if phone is not None and phone != "":
+        if phone is not None:
             c["phone"] = phone.strip()
         if email is not None:
             c["email"] = email.strip()
