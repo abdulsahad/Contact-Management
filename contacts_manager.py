@@ -13,7 +13,7 @@ class ContactsManager:
         contact = {"name": name.strip(), "phone": phone.strip(), "email": email.strip()}
         self.contacts.append(contact)
         key = self._index_name(contact["name"])
-        # keep first occurrence if duplicate names exist
+        # keeping first occurrence if duplicate names exist
         if key not in self.index:
             self.index[key] = contact
 
@@ -22,7 +22,7 @@ class ContactsManager:
 
     def find_by_name(self, name: str) -> Optional[Dict[str, str]]:
         key = self._index_name(name)
-        # O(1) lookup via index
+        # O(1) lookup through index
         contact = self.index.get(key)
         if contact:
             return contact

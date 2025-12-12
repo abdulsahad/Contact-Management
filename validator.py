@@ -10,3 +10,7 @@ def valid_email(email: str) -> bool:
     if not email:
         return True
     return bool(re.match(r"[^@]+@[^@]+\.[^@]+", email))
+
+
+
+

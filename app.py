@@ -1,6 +1,6 @@
 from contacts_manager import ContactsManager
 from storage import load_contacts, save_contacts
-from utils import valid_name, valid_phone, valid_email
+from validator import valid_name, valid_phone, valid_email
 from sample_data import generate_contacts
 
 DATA_FILE = "contacts.json"
@@ -17,12 +17,12 @@ def show_menu():
 
 def main():
     mgr = ContactsManager()
-    # load existing contacts
+    # loading existing contacts
     initial = load_contacts(DATA_FILE)
     for d in initial:
         mgr.add_contact(d.get("name", ""), d.get("phone", ""), d.get("email", ""))
 
-    # also generate sample contacts for demonstration
+    # also generate sample contacts for my demonstration for demo purposes (to compare sorting)
     sample_contacts = generate_contacts(20)
     for c in sample_contacts:
         mgr.add_contact(c['name'], c['phone'], c['email'])
