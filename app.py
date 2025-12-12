@@ -6,14 +6,14 @@ from sample_data import generate_contacts
 DATA_FILE = "contacts.json"
 
 def show_menu():
-    print("\n=====// Contact Management App //=====")
-    print("1. Add Contact")
+    print("\n\n\n=====// Contact Management App //=====")
+    print("1. Add a New Contact")
     print("2. View Contacts")
     print("3. Search Contact")
     print("4. Delete Contact")
     print("5. Update Contact")
     print("6. Exit")
-    print("7. Sort contacts & compare algorithms")
+    print("7. Sorting contacts and comparing algos")
 
 def main():
     mgr = ContactsManager()
@@ -38,44 +38,44 @@ def main():
                 continue
             phone = input("Phone: ").strip()
             if not valid_phone(phone):
-                print("Phone looks invalid.")
+                print("Phone is invalid.")
                 continue
             email = input("Email (optional): ").strip()
             if not valid_email(email):
-                print("Email looks invalid.")
+                print("Email is invalid.")
                 continue
             mgr.add_contact(name, phone, email)
-            print("Contact added.")
+            print("Contact is added.")
         elif choice == "2":
             contacts = mgr.list_contacts()
             if not contacts:
                 print("No contacts found.")
             else:
-                print("\n--- All Contacts ---")
+                print("\n\n\n=== All Contacts ===")
                 for i, c in enumerate(contacts, start=1):
                     print(f"{i}. {c.get('name')} - {c.get('phone')} - {c.get('email')}")
         elif choice == "3":
-            name = input("Name to search: ").strip()
+            name = input("Enter the Name to search: ").strip()
             found = mgr.find_by_name(name)
             if found:
                 print(f"Found: {found['name']} - {found['phone']} - {found['email']}")
             else:
                 print("Contact not found.")
         elif choice == "4":
-            name = input("Name to delete: ").strip()
+            name = input("Enter the Name to delete: ").strip()
             ok = mgr.delete_contact(name)
             print("Deleted." if ok else "Contact not found.")
         elif choice == "5":
-            name = input("Name to update: ").strip()
-            phone = input("New phone (leave blank to keep): ").strip()
-            email = input("New email (leave blank to keep): ").strip()
+            name = input("Enter the Name to update: ").strip()
+            phone = input("New phone (Press Enter if you want to keep it): ").strip()
+            email = input("New email (Press Enter if you want to keep it): ").strip()
             phone_arg = phone if phone != "" else None
             email_arg = email if email != "" else None
             updated = mgr.update_contact(name, phone=phone_arg, email=email_arg)
             print("Updated." if updated else "Contact not found.")
         elif choice == "6":
             save_contacts(DATA_FILE, mgr.list_contacts())
-            print("Goodbye. Contacts saved.")
+            print("Contacts saved")
             break
         elif choice == "7":
             contacts = mgr.list_contacts()
@@ -86,7 +86,7 @@ def main():
                 sample = contacts[:20]  # small sample
                 t_b = time_sort(bubble_sort, sample)
                 t_m = time_sort(merge_sort, sample)
-                print(f"Bubble sort: {t_b:.6f}s, Merge sort: {t_m:.6f}s")
+                print(f"\n\n\nBubble sort: {t_b:.6f}s, Merge sort: {t_m:.6f}s")
                 sorted_sample = merge_sort(sample)[:10]
                 print("First 10 contacts sorted by name (merge sort):")
                 for c in sorted_sample:
